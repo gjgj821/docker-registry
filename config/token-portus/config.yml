@@ -1,0 +1,27 @@
+version: 0.1
+loglevel: debug
+storage:
+  filesystem:
+    rootdirectory: /var/lib/registry
+  delete:
+    enabled: true
+http:
+  addr: 0.0.0.0:5000
+  debug:
+    addr: 0.0.0.0:5001
+  tls:
+    certificate: /certs/registry.crt
+    key: /certs/registry.key
+auth:
+  token:
+    realm: https://registry.ajmide.com:3000/v2/token
+    service: "Docker registry"
+    issuer: "Portus auth server"
+    rootcertbundle: /certs/registry.crtconfig
+notifications:
+  endpoints:
+    - name: portus
+      url: https://registry.ajmide.com:3000/v2/webhooks/events
+      timeout: 500ms
+      threshold: 5
+      backoff: 1s
