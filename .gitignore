@@ -1,5 +1,7 @@
 *.crt
 *.key
 data/*
+logs/*
 *.htpasswd
-^data/.gitkeep
+!data/.gitkeep
+!logs/.gitkeep

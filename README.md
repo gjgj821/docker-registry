@@ -37,8 +37,16 @@
 - pull：
     - docker pull registry.domain.com:5000/image:1.0
 
-## Auth Usage
--
+## Auth Mode
+- none：无访问权限控制
+- htpasswd：可进行用户验证
+    - 可以通过init.sh创建账户
+- token：可按用户区分操作权限
+    - base：可进行pull和push权限控制
+        - 可通过init.sh创建账户
+        - 权限需编辑auth_config.yml
+    - Portus：提供界面操作
+
 ## Portus Usage
 - 登陆token服务：
     - https://registry.domain.com:3000
