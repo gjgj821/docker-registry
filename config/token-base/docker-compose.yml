@@ -9,10 +9,16 @@ registry:
         - ../../data:/var/lib/registry
         - ./config.yml:/etc/docker/registry/config.yml
     links:
-        - token
+        - token:registry.ajmide.com
 
 token:
     image: cesanta/docker_auth:stable
+    command: "--v=2 --alsologtostderr /config/auth_config.yml"
+    ports:
+        - 3000:3000
     volumes:
-        - ./:/config:ro
-        - ../../log/docker_auth:/logs
+        - ../../certs:/certs
+        - ./auth_config.yml:/config/auth_config.yml
+        - ./auth_ext.sh:/bin/auth_ext.sh
+        - ./auth.htpasswd:/config/auth.htpasswd
+        - ../../logs/docker_auth:/logs

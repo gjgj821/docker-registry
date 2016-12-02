@@ -1,0 +1,50 @@
+server:
+    addr: ":3000"
+    certificate: "/certs/registry.crt"
+    key: "/certs/registry.key"
+
+token:
+    issuer: "Acme auth server" # Must match issuer in the Registry config.
+    expiration: 900
+
+users:
+    "gaojie":
+        password: "$2y$05$iOHB4BFdbAyapY7b2dfWpOLu6bwEWCi0mwm0QEckPi9uUvt1o12a2"
+
+# ext_auth:
+#     command: "auth_ext.sh"
+#     args: []
+
+# ACL specifies who can do what. If the match section of an entry matches the
+# request, the set of allowed actions will be applied to the token request
+# and a ticket will be issued only for those of the requested actions that are
+# allowed by the rule.
+#  * It is possible to match on user's name ("account"), subject type ("type")
+#    and name ("name"; for type=repository this is the image name).
+#  * Matches are evaluated as shell file name patterns ("globs") by default,
+#    so "foobar", "f??bar", "f*bar" are all valid. For even more flexibility
+#    match patterns can be evaluated as regexes by enclosing them in //, e.g.
+#    "/(foo|bar)/".
+#  * IP match can be single IP address or a subnet in the "prefix/mask" notation.
+#  * ACL is evaluated in the order it is defined until a match is found.
+#    Rules below the first match are not evaluated, so you'll need to put more
+#    specific rules above more broad ones.
+#  * Empty match clause matches anything, it only makes sense at the end of the
+#    list and can be used as a way of specifying default permissions.
+#  * Empty actions set means "deny everything". Thus, a rule with `actions: []`
+#    is in effect a "deny" rule.
+#  * A special set consisting of a single "*" action means "allow everything".
+#  * If no match is found the default is to deny the request.
+#
+# You can use the following variables from the ticket request in any field:
+#  * ${account} - the account name, currently the same as authenticated user's name.
+#  * ${service} - the service name, specified by auth.token.service in the registry config.
+#  * ${type} - the type of the entity, normally "repository".
+#  * ${name} - the name of the repository (i.e. image), e.g. centos.
+acl:
+    - match: {accout: ""}
+      actions: ["pull"]
+      comment: "Anonymous users can pull everything"
+    - match: {account: "*"}
+      actions: ["*"]
+      comment: "Allow everyone access to everything"
